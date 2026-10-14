@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Your cart - ShopFlow{% endblock %}
+{% block content %}
+  <h2>Your cart</h2>
+  {% if lines %}
+    <table>
+      <tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr>
+      {% for item, p, line_total in lines %}
+        <tr>
+          <td>
+            {% if p.active %}
+              <a href="{{ url_for('main.product', product_id=p.id) }}">{{ p.name }}</a>
+            {% else %}
+              {{ p.name }} (no longer available)
+            {% endif %}
+          </td>
+          <td>{{ p.price_paise|inr }}</td>
+          <td>
+            <form method="post" action="{{ url_for('main.cart_update', item_id=item.id) }}"
+                  style="display:flex; gap:6px">
+              <input type="number" name="quantity" value="{{ item.quantity }}"
+                     min="0" max="{{ p.stock }}" style="width:70px; margin:0">
+              <button type="submit">Update</button>
+            </form>
+          </td>
+          <td>{{ line_total|inr }}</td>
+          <td>
+            <form method="post" action="{{ url_for('main.cart_remove', item_id=item.id) }}">
+              <button type="submit">Remove</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <h3>Total: {{ total|inr }}</h3>
+    <p><em>Checkout comes in the next step.</em></p>
+  {% else %}
+    <p>Your cart is empty. <a href="{{ url_for('main.home') }}">Continue shopping</a></p>
+  {% endif %}
+{% endblock %}

@@ -41,6 +41,7 @@
         {% if current_user.role == 'admin' %}
           <a href="{{ url_for('main.admin_products') }}">Admin</a>
         {% endif %}
+        <a href="{{ url_for('main.cart') }}">Cart ({{ cart_count }})</a>
         <span>Hi, {{ current_user.name }}</span>
         <form method="post" action="{{ url_for('main.logout') }}" style="display:inline">
           <button type="submit">Logout</button>

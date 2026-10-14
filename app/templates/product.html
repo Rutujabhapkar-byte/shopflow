@@ -8,7 +8,15 @@
     <p>{{ p.description }}</p>
     {% if p.stock > 0 %}
       <p><strong>In stock</strong> ({{ p.stock }} available)</p>
-      <p><em>Add to cart is coming in the next step.</em></p>
+      {% if current_user.is_authenticated %}
+        <form method="post" action="{{ url_for('main.cart_add', product_id=p.id) }}">
+          <label>Quantity</label>
+          <input type="number" name="quantity" value="1" min="1" max="{{ p.stock }}">
+          <button class="primary" type="submit">Add to cart</button>
+        </form>
+      {% else %}
+        <p><a href="{{ url_for('main.login') }}">Log in</a> to add this to your cart.</p>
+      {% endif %}
     {% else %}
       <p><strong>Out of stock</strong></p>
     {% endif %}
