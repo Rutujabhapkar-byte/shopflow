@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Admin - Categories{% endblock %}
+{% block content %}
+  <h2>Categories</h2>
+  <p><a href="{{ url_for('main.admin_products') }}">&larr; Back to products</a></p>
+  <form method="post">
+    <label>New category name</label>
+    <input type="text" name="name" required>
+    <button class="primary" type="submit">Add category</button>
+  </form>
+  <ul>
+    {% for c in categories %}<li>{{ c.name }}</li>{% else %}<li>No categories yet.</li>{% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if p else 'Add' }} product{% endblock %}
+{% block content %}
+  <h2>{{ 'Edit product' if p else 'Add product' }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    <label>Name</label>
+    <input type="text" name="name" value="{{ request.form.get('name', p.name if p else '') }}" required>
+
+    <label>Description</label>
+    <textarea name="description" rows="4">{{ request.form.get('description', p.description if p and p.description else '') }}</textarea>
+
+    <label>Category</label>
+    <select name="category_id">
+      <option value="">None</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if p and p.category_id == c.id %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Price (in rupees)</label>
+    <input type="number" name="price" step="0.01" min="0.01"
+           value="{{ request.form.get('price', '%.2f' % (p.price_paise / 100) if p else '') }}" required>
+
+    <label>Stock</label>
+    <input type="number" name="stock" min="0"
+           value="{{ request.form.get('stock', p.stock if p else 0) }}" required>
+
+    <label>Image (jpg, png or webp, max 2 MB)</label>
+    {% if p and p.image_url %}<p><img src="{{ p.image_url }}" alt="" style="max-height:80px"></p>{% endif %}
+    <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp">
+
+    <label>
+      <input type="checkbox" name="active" style="width:auto"
+             {% if p is none or p.active %}checked{% endif %}>
+      Visible in the shop
+    </label>
+    <br><br>
+    <button class="primary" type="submit">Save</button>
+    <a href="{{ url_for('main.admin_products') }}">Cancel</a>
+  </form>
+{% endblock %}

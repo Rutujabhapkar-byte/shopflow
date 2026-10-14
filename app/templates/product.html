@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ p.name }} - ShopFlow{% endblock %}
+{% block content %}
+  <div class="detail">
+    {% if p.image_url %}<img src="{{ p.image_url }}" alt="{{ p.name }}">{% endif %}
+    <h2>{{ p.name }}</h2>
+    <h3>{{ p.price_paise|inr }}</h3>
+    <p>{{ p.description }}</p>
+    {% if p.stock > 0 %}
+      <p><strong>In stock</strong> ({{ p.stock }} available)</p>
+      <p><em>Add to cart is coming in the next step.</em></p>
+    {% else %}
+      <p><strong>Out of stock</strong></p>
+    {% endif %}
+  </div>
+{% endblock %}

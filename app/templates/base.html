@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ShopFlow{% endblock %}</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f6f7f9; color: #222; }
+    nav { background: #1f2937; color: #fff; padding: 12px 24px; display: flex;
+          justify-content: space-between; align-items: center; }
+    nav a, nav button { color: #fff; text-decoration: none; margin-left: 16px;
+          background: none; border: none; font-size: 1rem; cursor: pointer; }
+    main { max-width: 960px; margin: 32px auto; background: #fff; padding: 24px;
+           border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    main form { max-width: 480px; }
+    input, select, textarea { width: 100%; padding: 8px; margin: 6px 0 14px;
+           box-sizing: border-box; font-family: inherit; }
+    button.primary { padding: 10px 18px; background: #2563eb; color: #fff;
+           border: none; border-radius: 4px; cursor: pointer; }
+    .flash { background: #e0f2fe; color: #075985; padding: 8px 12px;
+             border-radius: 4px; margin-bottom: 12px; }
+    form.filter { max-width: none; display: flex; gap: 8px; align-items: center; }
+    form.filter input, form.filter select { width: auto; margin: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 16px; margin-top: 20px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;
+            text-decoration: none; color: inherit; }
+    .card img, .noimg { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; }
+    .noimg { background: #e5e7eb; display: flex; align-items: center;
+             justify-content: center; color: #6b7280; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; }
+    .detail img { max-width: 100%; max-height: 360px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{{ url_for('main.home') }}"><strong>ShopFlow</strong></a>
+    <div>
+      {% if current_user.is_authenticated %}
+        {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('main.admin_products') }}">Admin</a>
+        {% endif %}
+        <span>Hi, {{ current_user.name }}</span>
+        <form method="post" action="{{ url_for('main.logout') }}" style="display:inline">
+          <button type="submit">Logout</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('main.login') }}">Login</a>
+        <a href="{{ url_for('main.register') }}">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+  <main>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

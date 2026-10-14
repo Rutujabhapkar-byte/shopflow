@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <form class="filter" method="get">
+    <input type="text" name="q" placeholder="Search products" value="{{ q }}">
+    <select name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if c.id == category_id %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+    <button class="primary" type="submit">Search</button>
+  </form>
+
+  {% if products %}
+    <div class="grid">
+      {% for p in products %}
+        <a class="card" href="{{ url_for('main.product', product_id=p.id) }}">
+          {% if p.image_url %}
+            <img src="{{ p.image_url }}" alt="{{ p.name }}">
+          {% else %}
+            <div class="noimg">No image</div>
+          {% endif %}
+          <h3>{{ p.name }}</h3>
+          <p>{{ p.price_paise|inr }}</p>
+          {% if p.stock <= 0 %}<small>Out of stock</small>{% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No products found.</p>
+  {% endif %}
+{% endblock %}
